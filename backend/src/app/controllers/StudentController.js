@@ -2,6 +2,11 @@ import * as Yup from 'yup';
 import Student from '../models/Student';
 
 class StudentController {
+  async index(req, res) {
+    const students = await Student.findAll();
+    return res.json(students);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
@@ -62,6 +67,24 @@ class StudentController {
     const studentUpdated = await student.update(req.body);
 
     return res.json(studentUpdated);
+  }
+
+  async delete(req, res) {
+    const { studentId } = req.params;
+
+    if (!studentId) {
+      return res.status(400).json({ error: "Student's Id not provided!" });
+    }
+
+    const student = await Student.findByPk(studentId);
+
+    if (!student) {
+      return res.status(400).json({ error: 'Student does not exits' });
+    }
+
+    await student.destroy();
+
+    return res.json();
   }
 }
 

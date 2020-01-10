@@ -7,6 +7,8 @@ export default class Registration extends Model {
         student_id: Sequelize.INTEGER,
         plan_id: Sequelize.INTEGER,
         start_date: Sequelize.DATE,
+        end_date: Sequelize.DATE,
+        price: Sequelize.NUMBER,
       },
       {
         sequelize,
