@@ -1,10 +1,20 @@
 import * as Yup from 'yup';
-import { addMonths, parseISO, isPast, areIntervalsOverlapping } from 'date-fns';
+import {
+  addMonths,
+  parseISO,
+  isPast,
+  areIntervalsOverlapping,
+  format,
+} from 'date-fns';
+
 import { Op } from 'sequelize';
 
 import Registration from '../models/Registration';
 import Student from '../models/Student';
 import Plan from '../models/Plan';
+
+import RegistrationMail from '../jobs/RegistrationMail';
+import Queue from '../../lib/Queue';
 
 class RegistrationController {
   async index(req, res) {
@@ -83,6 +93,12 @@ class RegistrationController {
       price: plan.price * plan.duration,
     });
 
+    Queue.add(RegistrationMail.key, {
+      student,
+      plan,
+      registration,
+    });
+
     return res.json(registration);
   }
 
@@ -90,7 +106,7 @@ class RegistrationController {
     const registration = await Registration.findByPk(req.params.registrationId);
 
     if (!registration) {
-      return res.status(400).json({ error: 'Registration does not exists!' });
+      return res.status(401).json({ error: 'Registration does not exists!' });
     }
 
     const schema = Yup.object().shape({
@@ -162,6 +178,18 @@ class RegistrationController {
     });
 
     return res.json(registrationUpdated);
+  }
+
+  async delete(req, res) {
+    const registration = await Registration.findByPk(req.params.registrationId);
+
+    if (!registration) {
+      return res.status(401).json({ error: 'Registration does not exists!' });
+    }
+
+    await registration.destroy();
+
+    return res.json();
   }
 }
 
