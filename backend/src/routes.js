@@ -7,6 +7,9 @@ import StudentController from './app/controllers/StudentController';
 import SessionController from './app/controllers/SessionController';
 import PlanController from './app/controllers/PlanController';
 import RegistrationController from './app/controllers/RegistrationController';
+import CheckinController from './app/controllers/CheckinController';
+import HelpOrderController from './app/controllers/HelpOrderController';
+import AnswerHelpOrderController from './app/controllers/AnswerHelpOrderController';
 
 const routes = new Router();
 
@@ -20,6 +23,16 @@ routes.get('/students', StudentController.index);
 routes.post('/students', StudentController.store);
 routes.put('/students/:studentId', StudentController.update);
 routes.delete('/students/:studentId', StudentController.delete);
+routes.get('/students/:studentId/checkins', CheckinController.index);
+routes.post('/students/:studentId/checkins', CheckinController.store);
+routes.post('/students/:studentId/help-orders', HelpOrderController.store);
+routes.get('/students/:studentId/help-orders', HelpOrderController.index);
+
+routes.get('/help-orders', AnswerHelpOrderController.index);
+routes.post(
+  '/help-orders/:helpOrderId/answer',
+  AnswerHelpOrderController.store
+);
 
 routes.get('/plans', PlanController.index);
 routes.post('/plans', PlanController.store);

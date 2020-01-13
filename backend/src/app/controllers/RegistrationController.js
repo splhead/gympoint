@@ -1,11 +1,5 @@
 import * as Yup from 'yup';
-import {
-  addMonths,
-  parseISO,
-  isPast,
-  areIntervalsOverlapping,
-  format,
-} from 'date-fns';
+import { addMonths, parseISO, isPast, areIntervalsOverlapping } from 'date-fns';
 
 import { Op } from 'sequelize';
 
