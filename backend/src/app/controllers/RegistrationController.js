@@ -13,6 +13,7 @@ import Queue from '../../lib/Queue';
 class RegistrationController {
   async index(req, res) {
     const registrations = await Registration.findAll({
+      attributes: ['id', 'start_date', 'end_date', 'price', 'active'],
       order: ['student_id', 'start_date'],
     });
     return res.json(registrations);
