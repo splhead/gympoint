@@ -1,14 +1,17 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import { signOut } from '~/store/modules/auth/actions';
 
-import { Container, Profile } from './styles';
+import { Container, Profile, LogoMenuContainer, LogoContainer } from './styles';
 
 import logo from '~/assets/logo_gympoint.png';
 
 export default function Header() {
   const dispatch = useDispatch();
+
+  const profile = useSelector(state => state.user.profile);
 
   function handleSignOut() {
     dispatch(signOut());
@@ -16,20 +19,38 @@ export default function Header() {
 
   return (
     <Container>
-      <div>
-        <img src={logo} alt="GymPoint" />
+      <LogoMenuContainer>
+        <LogoContainer>
+          <img src={logo} alt="GymPoint" />
+        </LogoContainer>
         <nav>
           <ul>
-            <li>ALUNOS</li>
-            <li>PLANOS</li>
-            <li>MATRÍCULAS</li>
-            <li>PEDIDOS DE AUXÍLIO</li>
+            <li>
+              <NavLink to="/students" activeClassName="selected" exact>
+                ALUNOS
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/plans" activeClassName="selected" exact>
+                PLANOS
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/registrations" activeClassName="selected" exact>
+                MATRÍCULAS
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/help-orders" activeClassName="selected" exact>
+                PEDIDOS DE AUXÍLIO
+              </NavLink>
+            </li>
           </ul>
         </nav>
-      </div>
+      </LogoMenuContainer>
 
       <Profile>
-        <strong>Nome do Usuario</strong>
+        <strong>{profile.name}</strong>
         <a href="/" onClick={handleSignOut}>
           sair do sistema
         </a>
